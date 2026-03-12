@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HBD Sayang! ✨</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&family=Caveat:wght@700&display=swap');
+
+        body {
+            background: #fff0f3;
+            font-family: 'Quicksand', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            color: #444;
+        }
+
+        .container {
+            text-align: center;
+            background: white;
+            padding: 30px;
+            border-radius: 25px;
+            box-shadow: 0 15px 35px rgba(255, 77, 109, 0.2);
+            max-width: 380px;
+            width: 85%;
+            z-index: 10;
+            position: relative;
+        }
+
+        h1 { font-family: 'Caveat', cursive; color: #ff4d6d; font-size: 2.8rem; margin: 10px 0; }
+        
+        #typing-text { min-height: 60px; margin-bottom: 20px; font-size: 1rem; line-height: 1.5; }
+
+        .btn-main {
+            background: #ff4d6d;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 5px 15px rgba(255, 77, 109, 0.4);
+        }
+
+        .btn-main:hover { transform: scale(1.05); background: #ff758f; }
+
+        /* Style Kolom Balasan */
+        #reply-section {
+            display: none;
+            margin-top: 20px;
+            border-top: 1px dashed #ffb3c1;
+            padding-top: 20px;
+            animation: fadeInUp 1s;
+        }
+
+        input[type="text"] {
+            width: 80%;
+            padding: 10px;
+            border: 2px solid #ffb3c1;
+            border-radius: 10px;
+            outline: none;
+            font-family: 'Quicksand', sans-serif;
+        }
+
+        .btn-send {
+            background: #72efdd;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 10px;
+            margin-top: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #2d6a4f;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .emoji-rain {
+            position: fixed;
+            top: -50px;
+            z-index: 1;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+
+    <audio id="bg-music" loop>
+        <source src="https://www.mboxdrive.com/happy-birthday-music.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="container" id="main-card">
+        <div id="start-view">
+            <div style="font-size: 50px;">🎁</div>
+            <h1>Halo Sayang...</h1>
+            <p id="typing-text"></p>
+            <button class="btn-main" onclick="startSurprise()">Klik untuk Kejutan! ✨</button>
+        </div>
+
+        <div id="surprise-view" style="display: none;">
+            <div style="font-size: 50px;">🎂</div>
+            <h1>Happy Birthday!</h1>
+            <p>Semoga bahagia terus, panjang umur ,dilancarkan rezeki nya dan sabar ngadepin aku yaa hehe! Love youuu. ❤️💐✨</p>
+            
+            <div id="reply-section">
+                <p style="font-size: 0.8rem; color: #ff758f;">Tulis balasan buat aku di sini:</p>
+                <input type="text" id="user-reply" placeholder="Ketik sesuatu...">
+                <br>
+                <button class="btn-send" onclick="sendReply()">Kirim Balasan 💌</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const message = "Ada pesan singkat buat kamu hari ini. Coba klik tombol di bawah yaaaa...✨";
+        let charIndex = 0;
+
+        function typeEffect() {
+            if (charIndex < message.length) {
+                document.getElementById("typing-text").innerHTML += message.charAt(charIndex);
+                charIndex++;
+                setTimeout(typeEffect, 40);
+            }
+        }
+        window.onload = typeEffect;
+
+        function startSurprise() {
+            // Play Music
+            document.getElementById('bg-music').play();
+
+            // Switch View
+            document.getElementById('start-view').style.display = 'none';
+            document.getElementById('surprise-view').style.display = 'block';
+            document.getElementById('surprise-view').classList.add('fadeInUp');
+
+            // Munculkan kolom balasan setelah 3 detik
+            setTimeout(() => {
+                document.getElementById('reply-section').style.display = 'block';
+            }, 2000);
+
+            // Start Rain
+            setInterval(createEmoji, 300);
+        }
+
+        function createEmoji() {
+            const emojis = ['💖', '✨', '🌸', '🎈', '🥰', '🍰'];
+            const e = document.createElement('div');
+            e.className = 'emoji-rain';
+            e.innerHTML = emojis[Math.floor(Math.random() * emojis.length)];
+            e.style.left = Math.random() * 100 + 'vw';
+            e.style.fontSize = Math.random() * 20 + 20 + 'px';
+            document.body.appendChild(e);
+
+            const anim = e.animate([
+                { transform: 'translateY(0) rotate(0deg)', opacity: 1 },
+                { transform: `translateY(${window.innerHeight + 50}px) rotate(360deg)`, opacity: 0 }
+            ], { duration: 3000, easing: 'linear' });
+
+            anim.onfinish = () => e.remove();
+        }
+
+        function sendReply() {
+            const reply = document.getElementById('user-reply').value;
+            if (reply.trim() !== "") {
+                alert("Aww! Pesan kamu sudah tersimpan di hati aku! Makasih yaa ❤️");
+                document.getElementById('user-reply').value = "";
+            } else {
+                alert("Isi dulu dong balasannya, jangan dikosongin hehe~");
+            }
+        }
+    </script>
+</body>
+</html>
+
